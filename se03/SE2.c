@@ -5,18 +5,18 @@
  * Data: 23/11/2024
  * Grupo 07
  * Turma LT31N
- * Série de Exercícios 2 - Exercício 2: Armazenamento, ordenação e pesquisa de uma lista de livros
+ * Série de Exercícios 2
  */
 
+// Includes for the procTextFile.c file
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
 #include <errno.h>
-#include "func2.h"
-#include "funcSE1.h"
-#include "procTextFile.h"
+#include "SE2.h"
+#include "SE1.h"
 
 // 2.1 - Macros
 #define MAX_BOOKS 300    // Número máximo de livros na coleção por agora            (wc -l dados.csv: 296)
@@ -30,6 +30,106 @@
 #define MAX_DATE 10      // Tamanho máximo do campo de data de publicação -f8       (cut -d";" -f8 dados.csv | wc -L: 10)
 #define MAX_BINDING 9    // Tamanho máximo do campo de tipo de encadernação -f9     (cut -d";" -f9 dados.csv | wc -L: 9)
 #define MAX_PRICE 10     // Tamanho máximo do campo de preço -f10                   (cut -d";" -f10 dados.csv | wc -L: 10)
+
+// Defines for the procTextFile.c file
+#define DIM_MEM 512
+
+// Functions
+int processFile(const char *filename, int (*action)(const char *line, void *context), void *context)
+{
+
+    /**
+     * Thinking process:
+     * 1. Open the file with the given filename, perror if it can't be opened or smth goes wrong
+     * 2. Read the file line by line
+     * 3. Transform the line into a string
+     * 4. Apply the specified action function to each transformed line
+     * 5. The return value of the action function is stored in a variable and summed up in another variable
+     * ! 6. DO NOT FORGET TO CLOSE THE FILE!!!!
+     * 7. Return the sum of the return values of the action function
+     */
+
+    FILE *file = fopen(filename, "r"); // "r" means read mode
+
+    if (file == NULL) // if the file is not found or can't be opened, return -1
+    {
+        perror("Something went wrong trying to open the selected file...\n"); // error message
+        return -1;
+    }
+
+    char lineOfText[DIM_MEM]; // "Propõe-se a dimensão de 512 carateres para a memória destinada ao armazenamento da linha."
+    int sumOfValues = 0;      // "A função retorna a soma dos valores retornados por todas as chamadas à função action."
+
+    while (fgets(lineOfText, sizeof(lineOfText), file) != NULL)
+    { // "Sugere-se que realize a leitura do ficheiro de entrada com a função fgets."
+        // while there are lines to read, do the following:
+
+        size_t length = strlen(lineOfText); // gets the length of the line in size_t format
+
+        if (length > 0 && lineOfText[length - 1] == '\n')
+        {                                  // if the line is not empty and the last character is a newline character
+            lineOfText[length - 1] = '\0'; // then replace the newline character with a null character
+        }
+
+        int returned = action(lineOfText, context); // variable to store the return value of the action function
+        sumOfValues += returned;                    // sum of the return values of the action function
+    }
+
+    fclose(file);       // close the file
+    return sumOfValues; // return the sum of the return values of the action function
+}
+
+int linePrintRaw(const char *line, void *context)
+{
+    /**
+     * Thinking process:
+     * 1. Print the line to the standard output?
+     * 2. Return 1
+     */
+
+    printf("%s\n", line); // print the line
+    return 1;             // return 1 just like the assignment asks
+}
+
+int lineFilterPrint(const char *line, void *context)
+{
+
+    /**
+     * Thinking process:
+     * ! 1. wanted to make sure that if no line or context is given, the function that called this one knows that what it asked for is not possible, letting the
+     * ! user know that as well
+     * 2. make a copy of th line im processing and change the copy so that the original line is not changed, give it a terminator
+     * 3. split the field and store it, make sure it not NULL
+     * 4. uniformize the separators in the firstField
+     * 5. compare the firstField with the context, if they are equal, print the line and return 1
+     * 6. if they are not equal, return 0
+     */
+
+    if (!line || !context)
+    {
+        return -1; // Se a linha ou o contexto forem NULL, retorna -1 (erro)
+    }
+
+    char lineCopy[512]; // Faz uma cópia da linha para não alterar a original
+    strncpy(lineCopy, line, sizeof(lineCopy) - 1);
+    lineCopy[sizeof(lineCopy) - 1] = '\0'; // Adiciona um terminador nulo ao final da cópia da linha
+
+    char *firstField = splitField(lineCopy); // Separa o primeiro campo da linha
+    if (firstField == NULL)
+    {
+        return 0; // Se não houver primeiro campo, retorna 0
+    }
+
+    separatorUnify(firstField); // Uniformiza os separadores no primeiro campo
+
+    if (strcmp_ic(firstField, (const char *)context) == 0)
+    {
+        printf("%s\n", line); // Se o primeiro campo for igual ao contexto, imprime a linha e retorna 1
+        return 1;
+    }
+
+    return 0; // Caso contrário, retorna 0
+}
 
 int fillBookData(BookData *b, const char *line)
 {
@@ -127,3 +227,50 @@ int bookContainsAuthor(BookData *b, const char *word)
 {
     return 0;
 }
+
+// #include <stdio.h>
+// #include "pergunta2.h"
+// #include "string.h"
+
+// #define MAX_FIELDS 4
+// #define FIELD_DELIMITER ';'
+
+// int fillBookData( BookData *b, const char *line ){
+//     char fields[MAX_FIELDS][128]; // Armazena os campos extraídos da linha
+//     int field_count;
+
+//     // Divide a linha nos campos esperados
+//     field_count = splitField(line, fields, MAX_FIELDS, FIELD_DELIMITER);
+//     if (field_count != MAX_FIELDS) {
+//         return 0; // Falha se o número de campos não for o esperado
+//     }
+
+//     // Uniformiza o conteúdo de cada campo
+//     for (int i = 0; i < field_count; i++) {
+//         separatorUnify(fields[i]);
+//     }
+
+//     // Copia os campos relevantes para a estrutura BookData
+//     strncpy(b->title, fields[0], sizeof(b->title) - 1);
+//     b->title[sizeof(b->title) - 1] = '\0'; // Garante terminação nula
+
+//     strncpy(b->authors, fields[1], sizeof(b->authors) - 1);
+//     b->authors[sizeof(b->authors) - 1] = '\0';
+
+//     strncpy(b->year, fields[2], sizeof(b->year) - 1);
+//     b->year[sizeof(b->year) - 1] = '\0';
+
+//     strncpy(b->genre, fields[3], sizeof(b->genre) - 1);
+//     b->genre[sizeof(b->genre) - 1] = '\0';
+
+//     return 1;
+// }
+
+// int collAddBook( const char *line, void *context ){
+// 	if(line == NULL ) return 0;
+// 	Collection * collection = (Collection *) context;
+// 	if(collection->count + 1 > MAX_BOOKS) return 0;
+// 	int retorno = fillBookData( collection-> books, line);
+// 	collection->count++;
+// 	return retorno;
+// }
