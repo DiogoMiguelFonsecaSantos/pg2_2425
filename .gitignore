@@ -1,0 +1,52 @@
+# Object files
+*.o
+*.obj
+*.lo
+*.slo
+
+# Executable files
+*.exe
+*.out
+*.app
+*.elf
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared libraries (Windows and Unix)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Debug files
+*.pdb
+*.idb
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Build directories
+build/
+dist/
+release/
+Debug/
+Release/
+
+# IDE files
+*.code-workspace
+.vscode/
+.idea/
+*.cproject
+*.project
+
+# System files
+.DS_Store
+Thumbs.db
+*.class
