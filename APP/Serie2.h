@@ -1,50 +1,23 @@
-/**
- * Nome: Diogo Miguel Fonseca Santos
- * Número: A49936
- * Disciplina: Programação 2
- * Data: 23/11/2024
- * Grupo 07
- * Turma LT31N
- * Série de Exercícios 2 - Exercício 2: Armazenamento, ordenação e pesquisa de uma lista de livros 
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
+#include "Serie1.h"
 #include <ctype.h>
 #include <stdbool.h>
-#include <errno.h>
-#include "SE1.h"
-
 
 // 2.1 - Macros
-#define MAX_BOOKS 300    // Número máximo de livros na coleção por agora           (wc -l dados.csv: 296)
-#define MAX_TITLE 200    // Tamanho máximo do título f1                            (cut -d";" -f1 dados.csv | wc -L: 200)
-#define SIZE_ISBN 10     // Tamanho máximo do ISBN f2                              (cut -d";" -f2 dados.csv | wc -L: 10)
-#define SIZE_ISBN_13 13  // Tamanho máximo do ISBN 13 f3                           (cut -d";" -f3 dados.csv | wc -L: 13)
-#define MAX_AUTHORS 92   // Tamanho máximo do campo de autores f4                  (cut -d";" -f4 dados.csv | wc -L: 92)
-#define MAX_PUB_NAME 51  // Tamanho máximo do campo do editor f5                   (cut -d";" -f5 dados.csv | wc -L : 51)
-#define MAX_KEYWORDS 127 // Tamanho máximo do campo de palavras-chave f6           (cut -d";" -f6 dados.csv | wc -L: 127)
-#define MAX_PAGES 4      // Tamanho máximo do campo de número de páginas f7        (cut -d";" -f7 dados.csv | wc -L: 4)
-#define MAX_DATE 10      // Tamanho máximo do campo de data de publicação f8       (cut -d";" -f8 dados.csv | wc -L: 10)
-#define MAX_BINDING 9    // Tamanho máximo do campo de tipo de encadernação f9     (cut -d";" -f9 dados.csv | wc -L: 9)
-#define MAX_PRICE 10     // Tamanho máximo do campo de preço f10                   (cut -d";" -f10 dados.csv | wc -L: 10)
-
-#include <stdio.h>
-
-#define MAX_BOOKS 1000
-#define MAX_TITLE 100
-#define SIZE_ISBN 13
-#define MAX_AUTHORS 150
-#define MAX_PUB_NAME 60
-
-typedef struct bookse3
-{
-	char title[MAX_TITLE_SE2];
-	char isbn[SIZE_ISBN_SE2];
-	char authors[MAX_AUTHORS_SE2];
-	char publisher[MAX_PUB_NAME_SE2];
-} BookDataSE3;
+#define MAX_BOOKS 300    // Número máximo de livros na coleção por agora            (wc -l dados.csv: 296)
+#define MAX_TITLE_SE2 200    // Tamanho máximo do título -f1                            (cut -d";" -f1 dados.csv | wc -L: 200)
+#define SIZE_ISBN_SE2 10     // Tamanho máximo do ISBN -f2                              (cut -d";" -f2 dados.csv | wc -L: 10)
+#define SIZE_ISBN_13 13  // Tamanho máximo do ISBN 13 -f3                           (cut -d";" -f3 dados.csv | wc -L: 13)
+#define MAX_AUTHORS_SE2 92   // Tamanho máximo do campo de autores -f4                  (cut -d";" -f4 dados.csv | wc -L: 92)
+#define MAX_PUB_NAME_SE2 51  // Tamanho máximo do campo do editor -f5                   (cut -d";" -f5 dados.csv | wc -L : 51)
+#define MAX_KEYWORDS 127 // Tamanho máximo do campo de palavras-chave -f6           (cut -d";" -f6 dados.csv | wc -L: 127)
+#define MAX_PAGES 4      // Tamanho máximo do campo de número de páginas -f7        (cut -d";" -f7 dados.csv | wc -L: 4)
+#define MAX_DATE 10      // Tamanho máximo do campo de data de publicação -f8       (cut -d";" -f8 dados.csv | wc -L: 10)
+#define MAX_BINDING 9    // Tamanho máximo do campo de tipo de encadernação -f9     (cut -d";" -f9 dados.csv | wc -L: 9)
+#define MAX_PRICE 10     // Tamanho máximo do campo de preço -f10                   (cut -d";" -f10 dados.csv | wc -L: 10)
 
 typedef struct book {
  char title[MAX_TITLE_SE2];
@@ -64,12 +37,6 @@ typedef struct{
  BookData *refs[MAX_BOOKS];
  int count; // quantidade de elementos preenchidos em books
 } Collection;
-
-typedef struct{
- BookDataSE3 books[MAX_BOOKS];
- BookDataSE3 *refs[MAX_BOOKS];
- int count; // quantidade de elementos preenchidos em books
-} CollectionSE3;
 
 /**
  * @brief 1.1 Processes a text file line by line, applying a specified action to each line.
@@ -158,22 +125,6 @@ int fillBookData( BookData *b, const char *line );
 int collAddBook( const char *line, void *context );
 
 /**
- * @brief Compares two elements by their title.
- *
- * This function is intended to be used with the qsort function to sort
- * an array of elements by their title. The elements pointed to by `a`
- * and `b` should be of the same type and contain a title field that can
- * be compared.
- *
- * @param a Pointer to the first element to compare.
- * @param b Pointer to the second element to compare.
- * @return An integer less than, equal to, or greater than zero if the title
- *         of `a` is found, respectively, to be less than, to match, or be
- *         greater than the title of `b`.
- */
-int compareByTitle(const void *a, const void *b);
-
-/**
  * @brief Sorts the books in the array field books of the collection pointed to by col by title.
  * 
  * The order is alphabetically ascending, case insensitive.
@@ -187,6 +138,7 @@ int compareByTitle(const void *a, const void *b);
 void collSortTitle( Collection *col );
 
 
+int compareByTitle(const void *a, const void *b);
 
 
 

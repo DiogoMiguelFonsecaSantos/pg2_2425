@@ -31,11 +31,11 @@
 #define MAX_PRICE 10     // Tamanho máximo do campo de preço f10                   (cut -d";" -f10 dados.csv | wc -L: 10)
 
 typedef struct book {
- char title[MAX_TITLE];
- char isbn[SIZE_ISBN];
+ char title[MAX_TITLE_SE2];
+ char isbn[SIZE_ISBN_SE2];
  char isbn13[SIZE_ISBN_13];
- char authors[MAX_AUTHORS];
- char publisher[MAX_PUB_NAME];
+ char authors[MAX_AUTHORS_SE2];
+ char publisher[MAX_PUB_NAME_SE2];
  char keywords[MAX_KEYWORDS];
  char num_pages[MAX_PAGES];
  char date[MAX_DATE];

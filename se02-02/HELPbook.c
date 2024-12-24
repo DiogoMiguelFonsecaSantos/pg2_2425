@@ -41,7 +41,7 @@ int fillBookData( BookData *b, const char *line ){
         separatorUnify(p1);
         switch(countField){
             case 1:
-                if((strlen(p1) > MAX_TITLE-1)){
+                if((strlen(p1) > MAX_TITLE_SE2-1)){
                     return 0;
                 }
                 strcpy(b->title, p1);
@@ -51,21 +51,21 @@ int fillBookData( BookData *b, const char *line ){
                 break;
 
             case 3:
-                if((strlen(p1) != SIZE_ISBN-1)){
+                if((strlen(p1) != SIZE_ISBN_SE2-1)){
                     return 0;
                 }
                 strcpy(b->isbn, p1);
                 break;
                 
             case 4:
-                if((strlen(p1) > MAX_AUTHORS-1)){
+                if((strlen(p1) > MAX_AUTHORS_SE2-1)){
                     return 0;
                 }
                 strcpy(b->authors, p1);
                 break;
             
             case 5:
-                if((strlen(p1) > MAX_PUB_NAME-1)){
+                if((strlen(p1) > MAX_PUB_NAME_SE2-1)){
                     return 0;
                 }
                 strcpy(b->publisher, p1);

@@ -1,43 +1,18 @@
-/**
- * Nome: Diogo Miguel Fonseca Santos
- * Número: A49936
- * Disciplina: Programação 2
- * Data: 23/11/2024
- * Grupo 07
- * Turma LT31N
- * Série de Exercícios 2
- */
-
 // Includes for the procTextFile.c file
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
-#include <stdbool.h>
 #include <errno.h>
-#include "SE2.h"
-#include "SE1.h"
-
-// 2.1 - Macros
-#define MAX_BOOKS 300    // Número máximo de livros na coleção por agora            (wc -l dados.csv: 296)
-#define MAX_TITLE 200    // Tamanho máximo do título -f1                            (cut -d";" -f1 dados.csv | wc -L: 200)
-#define SIZE_ISBN 10     // Tamanho máximo do ISBN -f2                              (cut -d";" -f2 dados.csv | wc -L: 10)
-#define SIZE_ISBN_13 13  // Tamanho máximo do ISBN 13 -f3                           (cut -d";" -f3 dados.csv | wc -L: 13)
-#define MAX_AUTHORS 92   // Tamanho máximo do campo de autores -f4                  (cut -d";" -f4 dados.csv | wc -L: 92)
-#define MAX_PUB_NAME 51  // Tamanho máximo do campo do editor -f5                   (cut -d";" -f5 dados.csv | wc -L : 51)
-#define MAX_KEYWORDS 127 // Tamanho máximo do campo de palavras-chave -f6           (cut -d";" -f6 dados.csv | wc -L: 127)
-#define MAX_PAGES 4      // Tamanho máximo do campo de número de páginas -f7        (cut -d";" -f7 dados.csv | wc -L: 4)
-#define MAX_DATE 10      // Tamanho máximo do campo de data de publicação -f8       (cut -d";" -f8 dados.csv | wc -L: 10)
-#define MAX_BINDING 9    // Tamanho máximo do campo de tipo de encadernação -f9     (cut -d";" -f9 dados.csv | wc -L: 9)
-#define MAX_PRICE 10     // Tamanho máximo do campo de preço -f10                   (cut -d";" -f10 dados.csv | wc -L: 10)
+#include "Serie2.h"
+#include "Serie1.h"
 
 // Defines for the procTextFile.c file
 #define DIM_MEM 512
 
 // Functions
+
 int processFile(const char *filename, int (*action)(const char *line, void *context), void *context)
 {
-
     /**
      * Thinking process:
      * 1. Open the file with the given filename, perror if it can't be opened or smth goes wrong
@@ -61,7 +36,7 @@ int processFile(const char *filename, int (*action)(const char *line, void *cont
     int sumOfValues = 0;      // "A função retorna a soma dos valores retornados por todas as chamadas à função action."
 
     while (fgets(lineOfText, sizeof(lineOfText), file) != NULL)
-    { // "Sugere-se que realize a leitura do ficheiro de entrada com a função fgets."
+    {   // "Sugere-se que realize a leitura do ficheiro de entrada com a função fgets."
         // while there are lines to read, do the following:
 
         size_t length = strlen(lineOfText); // gets the length of the line in size_t format
@@ -86,8 +61,8 @@ int linePrintRaw(const char *line, void *context)
      * 1. Print the line to the standard output?
      * 2. Return 1
      */
-
-    printf("%s\n", line); // print the line
+    if (line != NULL)
+		printf("%s", line);// print the line
     return 1;             // return 1 just like the assignment asks
 }
 
@@ -119,8 +94,10 @@ int lineFilterPrint(const char *line, void *context)
     {
         return 0; // Se não houver primeiro campo, retorna 0
     }
-
+    
     separatorUnify(firstField); // Uniformiza os separadores no primeiro campo
+    
+    printf("Comparing '%s' with '%s'\n", firstField, (const char *)context); // Debug print
 
     if (strcmp_ic(firstField, (const char *)context) == 0)
     {
@@ -184,28 +161,6 @@ int collAddBook(const char *line, void *context)
     return 0; // if the function fillBookData was not successful, return 0
 }
 
-int compareByTitle(const void *a, const void *b)
-{ // Helper Compare function to sort the collection by title
-
-    const BookData *booka = (const BookData *)a; // casts a to BookData and assigns it to booka so that it can be used as a BookData type pointer
-    const BookData *bookb = (const BookData *)b; // casts b to BookData and assigns it to bookb so that it can be used as a BookData type pointer
-
-    char titlea[MAX_TITLE_SE2], titleb[MAX_TITLE_SE2]; // creates two arrays of chars with the size of MAX_TITLE for the titles of the books
-
-    for (size_t i = 0; i < MAX_TITLE_SE2; i++) 
-    { // for each character in the title of the books, convert it to lowercase and assign it to the respective title array
-
-        titlea[i] = tolower(booka->title[i]); // titlea receives the lowercase of the title of booka
-        titleb[i] = tolower(bookb->title[i]); // titleb receives the lowercase of the title of bookb
-        if (booka->title[i] == '\0' || bookb->title[i] == '\0')
-        { // if the current character of the title of booka or bookb is the null terminator, break the loop
-            break;
-        }
-    }
-
-    return strcmp(titlea, titleb); // returns the comparison of the two titles
-}
-
 void collSortTitle(Collection *col)
 {
     if (col == NULL || col->count <= 1)
@@ -227,50 +182,3 @@ int bookContainsAuthor(BookData *b, const char *word)
 {
     return 0;
 }
-
-// #include <stdio.h>
-// #include "pergunta2.h"
-// #include "string.h"
-
-// #define MAX_FIELDS 4
-// #define FIELD_DELIMITER ';'
-
-// int fillBookData( BookData *b, const char *line ){
-//     char fields[MAX_FIELDS][128]; // Armazena os campos extraídos da linha
-//     int field_count;
-
-//     // Divide a linha nos campos esperados
-//     field_count = splitField(line, fields, MAX_FIELDS, FIELD_DELIMITER);
-//     if (field_count != MAX_FIELDS) {
-//         return 0; // Falha se o número de campos não for o esperado
-//     }
-
-//     // Uniformiza o conteúdo de cada campo
-//     for (int i = 0; i < field_count; i++) {
-//         separatorUnify(fields[i]);
-//     }
-
-//     // Copia os campos relevantes para a estrutura BookData
-//     strncpy(b->title, fields[0], sizeof(b->title) - 1);
-//     b->title[sizeof(b->title) - 1] = '\0'; // Garante terminação nula
-
-//     strncpy(b->authors, fields[1], sizeof(b->authors) - 1);
-//     b->authors[sizeof(b->authors) - 1] = '\0';
-
-//     strncpy(b->year, fields[2], sizeof(b->year) - 1);
-//     b->year[sizeof(b->year) - 1] = '\0';
-
-//     strncpy(b->genre, fields[3], sizeof(b->genre) - 1);
-//     b->genre[sizeof(b->genre) - 1] = '\0';
-
-//     return 1;
-// }
-
-// int collAddBook( const char *line, void *context ){
-// 	if(line == NULL ) return 0;
-// 	Collection * collection = (Collection *) context;
-// 	if(collection->count + 1 > MAX_BOOKS) return 0;
-// 	int retorno = fillBookData( collection-> books, line);
-// 	collection->count++;
-// 	return retorno;
-// }

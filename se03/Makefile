@@ -1,26 +1,31 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99
-TARGET = app
+CFLAGS = -Wall -Wextra -std=c11
+LDFLAGS =
 
 # Source files
-SRCS = app.c bookModule.c vecModule.c dynModule.c lRefModule.c bstModule.c string.c pergunta1.c pergunta2.c procTextFile.c SE1.c func2.c funcSE1.c
-
+SRCS = app.c bookModule.c vecModule.c dynModule.c lRefModule.c bstModule.c SE1.c SE2.c
+# Header files
+HDRS = bookModule.h vecModule.h dynModule.h lRefModule.h bstModule.h SE1.h SE2.h
 # Object files
 OBJS = $(SRCS:.c=.o)
+
+# Executable name
+TARGET = app
 
 # Default target
 all: $(TARGET)
 
-# Link the object files to create the executable
+# Link the executable
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ $^
 
-# Compile each source file into an object file
-%.o: %.c
+# Compile source files into object files
+%.o: %.c $(HDRS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean up object files and the executable
+# Clean up build artifacts
 clean:
 	rm -f $(OBJS) $(TARGET)
 
+# Phony targets
 .PHONY: all clean

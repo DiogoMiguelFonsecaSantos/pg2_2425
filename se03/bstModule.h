@@ -1,6 +1,8 @@
 #ifndef BST_H
 #define BST_H
 #include "lRefModule.h"
+#include "SE1.h"
+#include "SE2.h"
 
 typedef struct tNode
 {
@@ -9,7 +11,7 @@ typedef struct tNode
 	LNode *head;
 } TNode;
 
-void bstAdd(TNode **rootPtr, char *namWord, Book *ref);
+void bstAdd(TNode **rootPtr, char *namWord, BookSE3 *ref);
 void bstBalance(TNode **rootPtr);
 LNode *bstSearch(TNode *root, char *namWord);
 void bstFree(TNode *root);

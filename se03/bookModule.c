@@ -4,14 +4,11 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <errno.h>
-#include "funcSE1.h"
-#include "procTextFile.h"
 #include "bookModule.h"
-#include <stdlib.h>
-#include <string.h>
-#include "func2.h"
+#include "SE1.h"
+#include "SE2.h"
 
-int fillBookData(BookData *b, const char *line)
+int fillBookData(BookDataSE3 *b, const char *line)
 {
     char aux[MAX_LINE]; // array to store the line (manual copy array)
     char *p1, *p2;      // pointers to store the fields
@@ -32,7 +29,7 @@ int fillBookData(BookData *b, const char *line)
         switch (countField)
         {
         case 1:
-            if ((strlen(p1) > MAX_TITLE - 1))
+            if ((strlen(p1) > MAX_TITLE_SE2 - 1))
             {
                 return 0;
             }
@@ -43,7 +40,7 @@ int fillBookData(BookData *b, const char *line)
             break;
 
         case 3:
-            if ((strlen(p1) != SIZE_ISBN - 1))
+            if ((strlen(p1) != SIZE_ISBN_SE2 - 1))
             {
                 return 0;
             }
@@ -51,7 +48,7 @@ int fillBookData(BookData *b, const char *line)
             break;
 
         case 4:
-            if ((strlen(p1) > MAX_AUTHORS - 1))
+            if ((strlen(p1) > MAX_AUTHORS_SE2 - 1))
             {
                 return 0;
             }
@@ -59,7 +56,7 @@ int fillBookData(BookData *b, const char *line)
             break;
 
         case 5:
-            if ((strlen(p1) > MAX_PUB_NAME - 1))
+            if ((strlen(p1) > MAX_PUB_NAME_SE2 - 1))
             {
                 return 0;
             }
@@ -77,7 +74,7 @@ int fillBookData(BookData *b, const char *line)
 
 
 // Function to create a Book object from a line of text
-Book *bookCreate(const char *line)
+BookSE3 *bookCreate(const char *line)
 {
     // Declare pointers for parsing the line
     char *p1, *p2;
@@ -87,7 +84,7 @@ Book *bookCreate(const char *line)
     int countField = 1;
 
     // Allocate memory for a new Book object
-    Book *b = malloc(sizeof(Book));
+    BookSE3 *b = malloc(sizeof(BookSE3));
     // Check if memory allocation failed
     if (!b)
         return NULL;
@@ -168,7 +165,7 @@ Book *bookCreate(const char *line)
     }
 }
 
-void bookFree(Book *b)
+void bookFree(BookSE3 *b)
 {
     if (b)
     {

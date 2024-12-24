@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "bookModule.h"
 #include "dynModule.h"
+#include "SE1.h"
+#include "SE2.h"
 
 #define INITIAL_SPACE 10
 
@@ -18,7 +20,7 @@ int dynCollAddBook(const char *line, void *context)
 
     DynCollection *coll = (DynCollection *)context;
 
-    Book *newBook = bookCreate(line);
+    BookSE3 *newBook = bookCreate(line);
     if (!newBook)
         return 0;
 

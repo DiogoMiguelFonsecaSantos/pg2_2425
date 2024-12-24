@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include "bookModule.h"
 #include "lRefModule.h"
+#include "SE1.h"
+#include "SE2.h"
 
-int lRefAdd(LNode **headPtr, Book *ref)
+int lRefAdd(LNode **headPtr, BookSE3 *ref)
 {
 
     LNode *newNode = malloc(sizeof(LNode));
@@ -53,7 +55,7 @@ void lRefPrint(LNode *head)
 {
     while (head)
     {
-        Book *book = head->ref;
+        BookSE3 *book = head->ref;
         printf("Título: %s, ISBN: %s, Autores: %s, Editor: %s\n",
                book->title, book->isbn, book->authors, book->publisher);
         head = head->next; // próximo nó

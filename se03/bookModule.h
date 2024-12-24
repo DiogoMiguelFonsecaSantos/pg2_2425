@@ -10,9 +10,9 @@ typedef struct
 	char isbn[MAX_ISBN]; // string com dimensão fixa
 	char *authors;		 // string alojada dinamicamente
 	char *publisher;	 // string alojada dinamicamente
-} Book;
+} BookSE3;
 
-void bookFree(Book *b);
-Book *bookCreate(const char *line);
+void bookFree(BookSE3 *b);
+BookSE3 *bookCreate(const char *line);
 
-#endif
+#endif	

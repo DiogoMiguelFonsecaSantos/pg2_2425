@@ -3,6 +3,8 @@
 #include <string.h>
 #include "bookModule.h"
 #include "vecModule.h"
+#include "SE1.h"
+#include "SE2.h"
 
 #define INIT_SPACE 10
 #define BLOCK_SIZE 10 // Quantidade de elementos por bloco quando redimensionar
@@ -11,20 +13,20 @@ VecBookRef *vecRefCreate(void)
 {
 
     VecBookRef *vec = malloc(sizeof(VecBookRef));
-    vec->refs = malloc(INIT_SPACE * sizeof(Book *));
+    vec->refs = malloc(INIT_SPACE * sizeof(BookSE3 *));
     vec->size = 0;
     vec->space = INIT_SPACE;
 
     return vec;
 }
 
-void vecRefAdd(VecBookRef *vec, Book *ref)
+void vecRefAdd(VecBookRef *vec, BookSE3 *ref)
 {
 
     if (vec->size == vec->space)
     {
         vec->space += BLOCK_SIZE;
-        vec->refs = realloc(vec->refs, vec->space * sizeof(Book *));
+        vec->refs = realloc(vec->refs, vec->space * sizeof(BookSE3 *));
     }
 
     vec->refs[vec->size++] = ref;
@@ -35,7 +37,7 @@ int vecRefSize(VecBookRef *vec)
     return vec->size;
 }
 
-Book *vecRefGet(VecBookRef *vec, int index)
+BookSE3 *vecRefGet(VecBookRef *vec, int index)
 {
     if (!vec || index < 0 || index >= vec->size)
     {
@@ -46,38 +48,38 @@ Book *vecRefGet(VecBookRef *vec, int index)
 
 int compareByTitle(const void *a, const void *b)
 {
-    Book *bookA = *(Book **)a;
-    Book *bookB = *(Book **)b;
+    BookSE3 *bookA = *(BookSE3 **)a;
+    BookSE3 *bookB = *(BookSE3 **)b;
     return strcmp(bookA->title, bookB->title);
 }
 
 void vecRefSortTitle(VecBookRef *vec)
 {
-    qsort(vec->refs, vec->size, sizeof(Book *), compareByTitle);
+    qsort(vec->refs, vec->size, sizeof(BookSE3 *), compareByTitle);
 }
 
 int compareIsbn(const void *a, const void *b)
 {
-    Book *bookA = *(Book **)a;
-    Book *bookB = *(Book **)b;
+    BookSE3 *bookA = *(BookSE3 **)a;
+    BookSE3 *bookB = *(BookSE3 **)b;
     return strcmp(bookA->isbn, bookB->isbn);
 }
 
 void vecRefSortIsbn(VecBookRef *vec)
 {
-    qsort(vec->refs, vec->size, sizeof(Book *), compareIsbn);   
+    qsort(vec->refs, vec->size, sizeof(BookSE3 *), compareIsbn);   
 }
 
 
 
-Book *vecRefSearchIsbn(VecBookRef *vec, char *isbn)
+BookSE3 *vecRefSearchIsbn(VecBookRef *vec, const char *isbn) // Change here
 {
-    Book key; // Create a temporary object to represent the search key
+    BookSE3 key; // Create a temporary object to represent the search key
     strncpy(key.isbn, isbn, MAX_ISBN - 1);
     key.isbn[MAX_ISBN - 1] = '\0';
 
-    Book *keyP = &key;
-    Book **result = bsearch(&keyP, vec->refs, vec->size, sizeof(Book *), compareIsbn);
+    BookSE3 *keyP = &key;
+    BookSE3 **result = bsearch(&keyP, vec->refs, vec->size, sizeof(BookSE3 *), compareIsbn);
 
     return (result) ? *result : NULL;
 }

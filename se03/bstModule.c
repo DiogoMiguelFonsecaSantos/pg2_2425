@@ -3,8 +3,10 @@
 #include "bookModule.h"
 #include "bstModule.h"
 #include "lRefModule.h"
+#include "SE1.h"
+#include "SE2.h"
 
-void bstAdd(TNode **rootPtr, char *namWord, Book *ref)
+void bstAdd(TNode **rootPtr, char *namWord, BookSE3 *ref)
 {
 
     if (*rootPtr == NULL)

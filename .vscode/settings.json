@@ -37,6 +37,8 @@
         "proctextfile.h": "c",
         "funcse1.h": "c",
         "errno.h": "c",
-        "func2.h": "c"
+        "func2.h": "c",
+        "se2.h": "c",
+        "dynmodule.h": "c"
     }
 }

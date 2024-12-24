@@ -42,7 +42,7 @@ int fillBookData(BookData *b, const char *line)
     strcpy(tempLine, line);          // copies the content of line to tempLine
 
     char *field = tempLine;                                                                                                                              // field receives the address of tempLine so it can be used in splitField
-    const int fieldSizes[] = {MAX_TITLE, SIZE_ISBN, SIZE_ISBN_13, MAX_AUTHORS, MAX_PUB_NAME, MAX_KEYWORDS, MAX_PAGES, MAX_DATE, MAX_BINDING, MAX_PRICE}; // array with the sizes of each field
+    const int fieldSizes[] = {MAX_TITLE_SE2, SIZE_ISBN_SE2, SIZE_ISBN_13, MAX_AUTHORS_SE2, MAX_PUB_NAME_SE2, MAX_KEYWORDS, MAX_PAGES, MAX_DATE, MAX_BINDING, MAX_PRICE}; // array with the sizes of each field
     char *bookFields[] = {b->title, b->isbn, b->isbn13, b->authors, b->publisher, b->keywords, b->num_pages, b->date, b->binding, b->price};             // array with the fields of the book
 
     for (int i = 0; i < 10; i++)
@@ -90,9 +90,9 @@ int compareByTitle(const void *a, const void *b)
     const BookData *booka = (const BookData *)a; // casts a to BookData and assigns it to booka so that it can be used as a BookData type pointer
     const BookData *bookb = (const BookData *)b; // casts b to BookData and assigns it to bookb so that it can be used as a BookData type pointer
 
-    char titlea[MAX_TITLE], titleb[MAX_TITLE]; // creates two arrays of chars with the size of MAX_TITLE for the titles of the books
+    char titlea[MAX_TITLE_SE2], titleb[MAX_TITLE_SE2]; // creates two arrays of chars with the size of MAX_TITLE for the titles of the books
 
-    for (size_t i = 0; i < MAX_TITLE; i++) 
+    for (size_t i = 0; i < MAX_TITLE_SE2; i++) 
     { // for each character in the title of the books, convert it to lowercase and assign it to the respective title array
 
         titlea[i] = tolower(booka->title[i]); // titlea receives the lowercase of the title of booka

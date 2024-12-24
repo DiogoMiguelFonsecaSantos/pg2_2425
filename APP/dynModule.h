@@ -1,14 +1,11 @@
-#ifndef DYN_H
-#define DYN_H
+#ifndef DYNMODULE_H
+#define DYNMODULE_H
 
 #include "vecModule.h"
-#include "SE1.h"
-#include "SE2.h"
 
-typedef struct
-{						  // Descritor de um vetor
-	VecBookRef *titleVec; // vetor a ordenar por título
-	VecBookRef *isbnVec;  // vetor a ordenar por isbn
+typedef struct {
+    VecBookRef *titleVec; // vector sorted by title
+    VecBookRef *isbnVec;  // vector sorted by ISBN
 } DynCollection;
 
 DynCollection *dynCollCreate(void);
