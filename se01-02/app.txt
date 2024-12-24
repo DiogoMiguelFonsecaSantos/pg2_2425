@@ -1,0 +1,13 @@
+Joao        ; 25;       Porto ; estudante  ; SolTeirO;     prt; tem     um CAO
+joao;25 ;   porto      ; TrabaLhador;caSAdo  ;       eSp; teM        um      gaTO   
+ Maria ;30;  Lisboa           ;desempREGADO;sOLteIRo;  PRt   ; teM   um    gaTO   
+        jorGE; 35   ; AlbufeirA     ; trabaLHAdor; CasADO   ; CHN;  teM um      gaTO   
+Ana;  25;           lisboa ;EstudANTE;caSaDO;  ESP  ; tem um        CAO
+maria;30 ;   lisboa               ;EstUdaNtE;CAsado   ;   uK; teM        um gaTO   
+        JORGE; 21; naZaRE; esTUDanTe; SolTeiro      ; pRT              ;    NADA
+Carlos;     20 ;     Coimbra     ;DEsempREGadO;SOLteirO ; FrA; tem um CAO
+        DiOGO; 22   ;                  BrAGA;      trABAlhaDOR  ;casaDO; Ita;               Nada
+Joao ;  25            ;            Lisboa       ;trABAlHaDoR;CaSaDo    ;prT        ; tem    um CAO
+ Pedro;         22  ;       Porto      ;TrabaLHADor;cAsaDO;   Ger        ; teM       um gaTO   
+ pedro ;  22  ;   porto       ; esTUdaNte;SoltEirO   ;           uK                                      ; teM   um gaTO   
+   dAVID; 17            ; AlcoBAça       ; esTUDanTe        ; solTEIRO;    gER                                                  ; tem um     CAO

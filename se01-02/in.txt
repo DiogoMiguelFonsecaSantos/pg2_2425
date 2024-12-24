@@ -1,0 +1,6 @@
+A49936@alunos.isel.pt;Diogo;Santos  - ;17_10_24;               !"#$%&/()=?                ;
+Nomes; científicos de; alguns ;animais ;;marinhos ;que ;;habitam o estuario; do; Tejo
+Tursiops truncatus;Chelonia mydas;Salmo salar
+Dicentrarchus labrax;Solea senegalensis;Anguilla anguilla
+Platichthys flesus;Raja clavata;Arenicola marina
+Carcinus maenas;Crangon crangon;Gadus morhua

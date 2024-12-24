@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/mnt/Shared/Programming/c/notes/**",
+                "/mnt/Shared/Programming/c/notes/notes_manager/**",
+                "C:/SharedFolder/include", // Add your C library include path here
+                "C:\\mingw64\\opt\\include"
+    ],
+            "compilerPath": "C:/path/to/your/compiler/gcc.exe", // Set your compiler path here
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-clang-x64",
+            "compilerArgs": []
+        }
+    ],
+    "version": 4
+}
