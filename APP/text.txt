@@ -1,0 +1,319 @@
+Considere a informação relativa a uma lista de livros armazenada num ficheiro de texto como o exemplo
+anexo, cujas linhas contêm a seguinte sequência de dados: Título; ISBN; ISBN-13; Autor(es); Editor;
+Palavras chave; Número de páginas; Data de publicação; Tipo de encadernação; Preço.
+Propõe-se a criação dos tipos BookData, como elemento de uma estrutura de dados para representar os
+dados dos livros, e Collection como descritor de um conjunto de dados bibliográficos.
+
+    typedef struct book {
+        char title[MAX_TITLE];
+        char isbn[SIZE_ISBN];
+        char authors[MAX_AUTHORS];
+        char publisher[MAX_PUB_NAME];
+    } BookData;
+
+    typedef struct{
+        BookData books[MAX_BOOKS];
+        BookData *refs[MAX_BOOKS];
+        int count; // quantidade de elementos preenchidos em books
+    } Collection;
+
+Pretende-se o desenvolvimento de um programa para armazenar a lista de livros, disponibilizando
+comandos para apresentar o seu conteúdo ou parte dele. O programa deve usar a função processFile
+para ler e armazenar os dados, a partir de um ficheiro indicado por argumento de linha de comando,
+armazenando-a no array books de um descritor do tipo Collection. Os dados são apresentados em
+resposta a comandos introduzidos através de standard input.
+
+Considerando a criação das variáveis sem recurso a alojamento dinâmico, admita um cenário simplificado
+em que existem dimensões máximas para os elementos de informação – livros, carateres do título e
+carateres dos nomes dos autores ou do editor. Estas dimensões podem ser identificadas a partir do ficheiro
+de dados, com a ajuda dos comandos do Linux, por exemplo: «wc -l -L file» para obter, relativamente
+a um ficheiro, a quantidade de linhas e a dimensão da mais longa; «cat file | cut -d";" -f
+field_number | wc -L» para identificar a maior dimensão de um determinado campo. Recomenda-se o
+sobredimensionamento das quantidades observadas.
+
+
+
+Após a leitura do ficheiro e preenchimento da estrutura de dados, o programa deve esperar, em ciclo, os
+comandos seguintes:
+
+• l Apresenta a lista de todos os livros, com ordem alfabeticamente crescente por título, indicando, para cada um: título, autor, editor e ISBN;
+
+• a name Apresenta um subconjunto da lista de livros, com ordem alfabeticamente crescente por título, indicando, para cada um: título, autor, editor e ISBN; Os livros selecionados são os que
+         contêm a palavra name no campo de autores. A verificação da palavra deve ser insensível a
+         maiúsculas ou minúsculas;
+
+• i isbn Apresenta os dados relativos ao livro com o ISBN indicado; Se este não existir, apresenta um aviso;
+
+• q Termina.
+
+
+int fillBookData( BookData *b, const char *line );
+destinada a armazenar a informação de um livro. Deve identificar os campos da linha indicada por line
+e copiar os relevantes para a estrutura indicada por b, uniformizando os respetivos conteúdos. Deve usar
+as funções splitField e separatorUnify da série anterior.
+A função fillBookData retorna: 1, em caso de sucesso; 0, se a linha não tiver o conteúdo adequado.
+
+char *splitField(char *str)
+{
+    if (str == NULL)// Verifica se a string fornecida inválida.
+    {
+        printf("String sem nenhum campo / String NULL\n\n");// Se for NULL, retorna NULL imediatamente para indicar String sem nenhum campo.
+        return NULL;
+    }
+
+    while (*str != ';' && *str != '\0')//Varrimento da string até encontrar um separador ';' ou o final da string ('\0').
+    {
+        str++; // Avança o ponteiro para o próximo char.
+    }
+
+    if (*str == ';')// Se o char encontrado for o separador ';', processa o final do campo.
+    {
+        *str = '\0';    // Substitui o separador ';' por '\0', terminando a string atual.
+        return str + 1; // Retorna o ponteiro para o próximo campo, logo após o ';'.
+    }
+    else
+    {                // Se não houver mais separadores, significa que chegamos ao fim da string.
+        return NULL; // Retorna NULL para indicar que não há mais campos a processar.
+    }
+}
+
+void separatorUnify(char str[])
+{
+    int i = 0, j = 0;
+
+    // Ignorar separadores no início (espaços, tabulações ou novas linhas)
+    while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
+    {
+        i++;
+    }
+
+    // Processar a string, copiando apenas caracteres não-separadores ou adicionando um único espaço entre palavras
+    while (str[i] != '\0')
+    {
+        if (str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
+        {
+            // Copiar caractere não-separador para a posição correta
+            str[j++] = str[i];
+        }
+        else if (j > 0 && str[j - 1] != ' ')
+        {
+            // Se encontramos um separador e o último caractere copiado não é um espaço,
+            // adicionamos um único espaço (para evitar múltiplos espaços consecutivos)
+            str[j++] = ' ';
+        }
+        i++;
+    }
+
+    // Remover qualquer espaço extra no final
+    if (j > 0 && str[j - 1] == ' ')
+    {
+        j--;
+    }
+
+    // Colocar o terminador nulo no final da nova string
+    str[j] = '\0';
+}
+
+
+int strcmp_ic(const char *str1, const char *str2)
+{
+    char *str1copy = str1;
+    char *str2copy = str2;
+
+    while (*str1 && *str2)
+    {
+        char c1 = tolower((unsigned char)*str1);
+        char c2 = tolower((unsigned char)*str2);
+
+        if (c1 != c2)
+        {
+            return c1 - c2;
+        }
+
+        str1++;
+        str2++;
+    }
+
+    int result = tolower((unsigned char)*str1) - tolower((unsigned char)*str2);
+    printf("%d   %s    %s   %d  %d\n",result,str1,str2,strlen(str1copy),strlen(str2copy));
+    return result;
+}
+
+int fillBookData( BookData *b, const char *line ){
+    char aux[MAX_LINE];
+    char *p1, *p2;
+    int i = 0;
+    int countField = 1;
+    while(*(line+i) != '\0'){
+        aux[i] = *(line+i);
+        i++;
+    }
+    aux[i] = '\0';
+    p1 = aux;
+    do{
+
+        p2 = splitField(p1);
+        separatorUnify(p1);
+        switch(countField){
+            case 1:
+                if((strlen(p1) > MAX_TITLE-1)){
+                    return 0;
+                }
+                strcpy(b->title, p1);
+                break;
+
+            case 2:
+                break;
+
+            case 3:
+                if((strlen(p1) != SIZE_ISBN-1)){
+                    return 0;
+                }
+                strcpy(b->isbn, p1);
+                break;
+                
+            case 4:
+                if((strlen(p1) > MAX_AUTHORS-1)){
+                    return 0;
+                }
+                strcpy(b->authors, p1);
+                break;
+            
+            case 5:
+                if((strlen(p1) > MAX_PUB_NAME-1)){
+                    return 0;
+                }
+                strcpy(b->publisher, p1);
+                break;
+
+            default:
+                break;
+        }
+        countField++;
+    }while((p1 = p2) != NULL);
+    return 1;
+}
+
+EXERCÍCIO:
+Pretende-se uma nova implementação do programa descrito aqui anteriormente, explorando
+os mecanismos de alojamento dinâmico, para flexibilizar o dimensionamento dos dados a processar.
+
+Tal como na versão anterior, a informação relativa a uma lista de livros é obtida de um ficheiro de texto e
+depositada numa estrutura de dados, agora baseada em alojamento dinâmico. Após esta fase, o programa deve
+esperar, em ciclo, os comandos “l”, “i”, “a” e “q” especificados anteriormente na descrição anterior. No caso do comando “a”, a nova
+implementação recorre a uma estrutura de dados adicional, para melhorar a eficiência das pesquisas.
+
+A modificação da estrutura de dados anteriormente existente consiste em usar alojamento dinâmico de
+memória, de modo a permitir o dimensionamento flexível, em função da quantidade dados recebidos:
+
+•   Os elementos de informação essenciais são representados pelo tipo struct Book, semelhante ao antigo
+    tipo BookData, com a diferença de alojar dinamicamente as strings que podem ter dimensão diversa.
+    Para isso, os respetivos campos passam a ser ponteiros para espaço alojado dinamicamente com a
+    dimensão efetivamente necessária para as strings. Excetua-se o campo isbn que é um array de char,
+    dado que esta string tem dimensão fixa. Os elementos do tipo Book são alojados dinamicamente, um
+    a um em blocos individuais, e referenciados através de outras estruturas de dados, também dinâmicas;
+
+•   As estruturas para referenciar os elementos Book são arrays de ponteiros com alojamento dinâmico,
+    designados por vetores, cujo redimensionamento é realizado pela função realloc de biblioteca.
+    Propõe-se a utilização de dois vetores destes, para referenciar os elementos de forma independente
+    com duas ordenações específicas para os comandos “l” e “i”.
+
+Os tipos de struct propostos para construir a estrutura de dados são os seguintes:
+
+    typedef struct {  // Descritor dos dados de um livro
+        char *title; // string alojada dinamicamente
+        char isbn[MAX_ISBN]; // string com dimensão fixa
+        char *authors; // string alojada dinamicamente
+        char *publisher; // string alojada dinamicamente
+    } Book;
+
+    typedef struct{ // Descritor de um vetor
+        Book **refs; // array alojado dinamicamente
+        int size; // quantidade de elementos preenchidos
+        int space; // quantidade de elementos alojados
+    } VecBookRef;
+
+    typedef struct{ // Descritor de um vetor
+        VecBookRef *titleVec; // vetor a ordenar por título
+        VecBookRef *isbnVec; // vetor a ordenar por isbn
+    } DynCollection;
+
+
+Ao construir as estruturas de dados, cada elemento Book será alojado e preenchido com os dados provenientes
+do ficheiro, sendo de seguida o seu endereço adicionado aos arrays dinâmicos para referenciação.
+
+Após o preenchimento, realiza-se a ordenação dos vetores de referenciação, um alfabeticamente por título,
+para responder ao comando “l” em percurso sequencial, e o outro por ISBN, para responder ao comando “i”
+em pesquisa binária.
+
+
+No desenvolvimento do programa, devem ser reutilizados os módulos e header files anteriormente criados, se
+adequados, ou parte do seu conteúdo, adaptado para desenvolver outros.
+
+Propõe-se o desenvolvimento organizado nas fases seguintes, escrevendo e testando sucessivamente cada uma
+das funcionalidades especificadas.
+
+Isto vai ser usado para ler de um ficheiro .csv: 
+
+The C Programming Language;0131103628;9780131103627;Brian W. Kernighan, Dennis M. Ritchie;Prentice Hall;language, programming;272;1988-04-01;Paperback;67.00 USD
+C Programming Absolute Beginner's Guide (3rd Edition);0789751984;9780789751980;Greg Perry, Dean Miller;Que Publishing;guide, beginner, absolute, programming;352;2013-08-17;Paperback;29.99 USD
+The C Programming Language;8120305965;9788120305960;Brian W. Kernighan, Dennis M. Ritchie;Prentice;language, programming;272;1988;Paperback;14.95 USD
+
+em que só os campos descritos na estrutura que se pretende são utilizados (title, isbn authors e publisher);
+e sabendo que neste ficheiro csv estão os campos por ordem: Título; ISBN; ISBN-13; Autor(es); Editor; Palavras chave; Número de páginas; Data de publicação; Tipo de encadernação; Preço.
+
+1. Construção e preenchimento da estrutura de dados dinâmica.
+
+    Transcreva a declarações e definições relativas à estrutura de dados proposta. Escreva o software
+    especificado abaixo, desenvolvendo os módulos de código fonte e os respetivos header files.
+
+1.1. Escreva o código para gerir os descritores de livro, bookCreate e bookFree.
+
+
+    Book *bookCreate( const char *line );
+
+destina-se a criar o descritor de um livro com os campos obtidos de uma linha de texto indicada por
+line. Deve alojar dinamicamente o espaço necessário para uma estrutura do tipo Book, bem como
+para as strings a associar aos campos title, authors e publisher. Esta função retorna o endereço
+do Book alojado, em caso de sucesso, ou NULL, se alinha de texto não é válida.
+Esta função pode ser construída por adaptação da antiga função fillBookData. Deve ter o cuidado
+de não deixar espaço alojado sem utilização, nomeadamente quando a linha é inválida.
+
+    void bookFree( Book *b );
+
+liberta a memória de alojamento dinâmico ocupada pela struct Book indicada por b e pelas strings dela dependentes.
+
+
+1.2. Escreva o código para gerir os vetores de referências, com as funções vecRefCreate, vecRefAdd, vecRefSize, vecRefGet, vecRefSortTitle, vecRefSortIsbn, vecRefSearchIsbn e vecRefFree.
+
+
+    VecBookRef *vecRefCreate ( void );
+
+aloja dinamicamente o espaço para o descritor de um vetor de referências e preenche-o com as condições
+iniciais. O campo size deve ter o valor 0, indicando o estado vazio; O campo space deve ter o valor
+coerente com a iniciação do campo refs.
+
+
+    void vecRefAdd( VecBookRef *vec, Book *ref );
+
+adiciona a referência de um livro. O parâmetro vec indica o descritor do vetor. O parâmetro ref indica
+o livro a referenciar. O espaço alojado para o array de ponteiros deve ser redimensionado quando
+necessário, utilizando a função realloc de biblioteca. O redimensionamento deve ocorrer em blocos
+de vários elementos, por motivos de eficiência.
+
+
+    int vecRefSize( VecBookRef *vec );
+
+retorna o número de elementos referenciados no vetor de referências identificado por vec.
+
+
+    Book *vecRefGet( VecBookRef *vec, int index );
+
+retorna o endereço elemento referenciado na posição index do vetor de referências identificado por
+vec. Se a posição indicada for inválida, retorna NULL.
+
+
+    void vecRefSortTitle( VecBookRef *vec );
+
+ordena o array de referências identificado por vec, alfabeticamente crescente pelo título dos livros
+referenciados, para suportar o comando “l”. Deve usar a função qsort de biblioteca.

@@ -1,11 +1,10 @@
 /**
- * 2nd day: -0.4v
+ * 5th day: -2.2
  */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include "bookModule.h"
+#include <string.h>#include "bookModule.h"
 #include "vecModule.h"
 #include "dynModule.h"
 #include "Serie2.h"

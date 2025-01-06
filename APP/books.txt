@@ -1,6 +1,0 @@
-The C Programming Language;0131103628;;Brian W. Kernighan, Dennis M. Ritchie;Prentice Hall
-C Programming Absolute Beginner's Guide (3rd Edition);0789751984;Greg Perry, Dean Miller;Que Publishing
-The C Programming Language;8120305965;Brian W. Kernighan, Dennis M. Ritchie;Prentice
-C Programming: A Modern Approach, 2nd Edition;0393979504; K. N. King;W. W. Norton & Company
-Programming in C (4th Edition) (Developer's Library);0321776410; Stephen G. Kochan;Addison-Wesley Professional
-C Programming Success in a Day: Beginners' Guide To Fast, Easy And Efficient Learning Of C Programming;1508429030; Sam Key;CreateSpace Independent Publishing Platform
